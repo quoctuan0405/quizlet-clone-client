@@ -1,5 +1,5 @@
 import React from 'react';
-import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { fade, makeStyles, Theme, createStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,6 +17,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import Link from 'next/link';
 import { useMeQuery } from '../generated/operation';
 import { useRouter } from 'next/router';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,10 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: theme.spacing(2),
         },
         title: {
-            display: 'none',
-            [theme.breakpoints.up('sm')]: {
-                display: 'block',
-            },
+            display: 'block',
+            fontWeight: "bold",
+            [theme.breakpoints.down('xs')]: {
+                paddingRight: theme.spacing(2),
+                marginRight: theme.spacing(1)
+            }
         },
         search: {
             position: 'relative',
@@ -100,6 +103,9 @@ export const Header: React.FC<Props> = ({query}) => {
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const theme = useTheme();
+    const matchesXs = useMediaQuery(theme.breakpoints.down('xs'));
 
     const router = useRouter();
 
@@ -207,8 +213,8 @@ export const Header: React.FC<Props> = ({query}) => {
             <AppBar position="static">
                 <Toolbar>
                     <Link href="/">
-                        <Typography className={classes.title} variant="h6" noWrap style={{cursor: "pointer"}}>
-                            Quizlet clone
+                        <Typography className={classes.title} variant="h5" noWrap style={{cursor: "pointer"}}>
+                            {matchesXs ? "Qc" : "Quizlet clone"}
                         </Typography>
                     </Link>
                     <div className={classes.search}>

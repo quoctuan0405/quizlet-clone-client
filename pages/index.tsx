@@ -16,18 +16,23 @@ const useStyes = makeStyles((theme) => ({
         background: `url(${triangles})`,
         backgroundSize: "100vw",
         backgroundPositionY: 50,
-        backgroundAttachment: "fixed"
+        backgroundAttachment: "fixed",
     },
     bannerCard: {
         width: "100%",
         height: "45vh",
         background: `url(https://i.postimg.cc/9fZQMFKY/pexels-felix-mittermeier-1146134.jpg)`,
         backgroundSize: "100vw",
-        backgroundAttachment: "fixed"
+        backgroundAttachment: "fixed",
+        [theme.breakpoints.down("xs")]: {
+            backgroundSize: "200vw"
+        }
     },
     title: {
         fontWeight: "bold", 
         marginTop: "17vh",
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
         color: theme.palette.grey[300]
     }
 }));
