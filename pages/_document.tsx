@@ -14,7 +14,6 @@ export default class MyDocument extends Document {
                     <meta name="keywords" content="quizlet, clone, nest, next, nestjs, nextjs, graphql, apollo, flashcard" />
                     <meta name="author" content="John Doe" />
                     <meta property="image" content="https://i.postimg.cc/1tjwLHkC/quizlet.png" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <meta property="og:type" content="website" />
                     <meta property="og:title" content="Quizlet clone!" />
                     <meta property="og:description" content="A Quizlet clone with option and explanation feature added" />
