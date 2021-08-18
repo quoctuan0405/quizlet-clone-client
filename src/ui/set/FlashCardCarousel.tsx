@@ -57,11 +57,12 @@ interface Props {
     set: SetQuery["set"] | undefined | null
 }
 
+type term = NonNullable<NonNullable<SetQuery["set"]>["terms"]>[0];
+
 export const FlashCardCarousel: React.FC<Props> = ({height, set}) => {
     const classes = useStyles();
 
-    const terms = set?.terms;
-    const [cards, setCards] = useState<typeof terms>();
+    const [cards, setCards] = useState<term[]>([]);
 
     const [index, setIndex] = useState<number>(0);
     
@@ -71,7 +72,7 @@ export const FlashCardCarousel: React.FC<Props> = ({height, set}) => {
     const matchesXs = useMediaQuery(theme.breakpoints.down('xs'));
 
     useEffect(() => {
-        if (set && set.terms && set.terms.length !== 0) {
+        if (set && set.terms && set.terms[0]) {
             setCards([set.terms[0]]);
         }
     }, [set?.terms]);
@@ -81,11 +82,7 @@ export const FlashCardCarousel: React.FC<Props> = ({height, set}) => {
 
         if (index === set.terms.length - 1) {return;}
 
-        if (index > 0) {
-            setCards([set.terms[index - 1], set.terms[index], set.terms[index + 1]]);
-        } else {
-            setCards([set.terms[index], set.terms[index + 1]]);
-        }
+        setCards([...cards, set.terms[index + 1]]);
 
         setIndex(index + 1);
     }
@@ -94,8 +91,10 @@ export const FlashCardCarousel: React.FC<Props> = ({height, set}) => {
         if (!set || !set.terms || set.terms.length === 0) { return; }
 
         if (index > 1) {
-            setCards([set.terms[index - 2], set.terms[index - 1]]);
+            cards.pop();
+            setCards(cards);
             setIndex(index - 1);
+            
         } else if (index === 0 || index === 1) {
             setCards([set.terms[0]]);
             setIndex(0);
