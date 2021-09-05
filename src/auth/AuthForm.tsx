@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import MUILink from '@material-ui/core/Link';
 import technologyWaveImage from "../../assets/SVG/technologyWave.svg";
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -67,13 +68,23 @@ export const AuthForm: React.FC<Props> = ({type}) => {
 
     const router = useRouter();
 
-    const [login, { error: loginError }] = useLoginMutation({ refetchQueries: [{ query: ME_QUERY }] });
-    const [signup, { error: signupError }] = useSignupMutation({ refetchQueries: [{ query: ME_QUERY }] });
+    const [cookies, setCookies] = useCookies(["accessToken"]);
+
+    const [login, { error: loginError, data: loginData }] = useLoginMutation({ refetchQueries: [{ query: ME_QUERY }] });
+    const [signup, { error: signupError, data: signupData }] = useSignupMutation({ refetchQueries: [{ query: ME_QUERY }] });
+
+    useEffect(() => {
+        if (loginData?.login || signupData?.signup) {
+            router.push("/");
+        }
+
+    }, [loginData, signupData]);
 
     const setSchema = Yup.object().shape({
         username: Yup.string().required("Required").min(2, "Too short"),
         password: Yup.string().required("Required").min(8, "Password is too short")
     });
+
     return (
         <Grid container direction="column" className={classes.container}>
             <Grid item>
@@ -92,13 +103,17 @@ export const AuthForm: React.FC<Props> = ({type}) => {
                                 initialValues={{ username: '', password: '' }}
                                 validationSchema={setSchema}
                                 onSubmit={async ({ username, password }, { setSubmitting }) => {
+                                    let accessToken: string | undefined | null;
                                     if (type === AuthFormType.LOGIN) {
-                                        await login({ variables: { username, password } });
+                                        const { data } = await login({ variables: { username, password } });
+                                        accessToken = data?.login?.accessToken;
                                     } else {
-                                        await signup({ variables: { username, password }});
+                                        const { data } = await signup({ variables: { username, password }});
+                                        accessToken = data?.signup?.accessToken;
                                     }
+                                    setCookies("accessToken", accessToken, { path: "/" });
+
                                     setSubmitting(false);
-                                    router.push('/');
                                 }}
                             >
                                 {({ submitForm, isSubmitting }) => (

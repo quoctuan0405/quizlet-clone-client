@@ -175,6 +175,7 @@ export type User = {
   username: Scalars['String'];
   sets?: Maybe<Array<Maybe<Set>>>;
   learningTerms?: Maybe<Array<Maybe<UserLearningTerm>>>;
+  accessToken?: Maybe<Scalars['String']>;
 };
 
 export type UserLearningTerm = {

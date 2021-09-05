@@ -5,6 +5,7 @@ export const LOGIN_MUTATION = gql`
         login(loginInput:{username: $username, password: $password}) {
             id
             username
+            accessToken
         }
     }
 `;
@@ -13,6 +14,7 @@ export const SIGNUP_MUTATION = gql`
     mutation signup($username: String!, $password: String!) {
         signup(signupInput:{username: $username, password: $password}) {
             id
+            accessToken
         }
     }
 `;

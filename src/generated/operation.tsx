@@ -178,6 +178,7 @@ export type User = {
   username: Scalars['String'];
   sets?: Maybe<Array<Maybe<Set>>>;
   learningTerms?: Maybe<Array<Maybe<UserLearningTerm>>>;
+  accessToken?: Maybe<Scalars['String']>;
 };
 
 export type UserLearningTerm = {
@@ -203,7 +204,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
+    & Pick<User, 'id' | 'username' | 'accessToken'>
   )> }
 );
 
@@ -217,7 +218,7 @@ export type SignupMutation = (
   { __typename?: 'Mutation' }
   & { signup?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id'>
+    & Pick<User, 'id' | 'accessToken'>
   )> }
 );
 
@@ -408,6 +409,7 @@ export const LoginDocument = gql`
   login(loginInput: {username: $username, password: $password}) {
     id
     username
+    accessToken
   }
 }
     `;
@@ -442,6 +444,7 @@ export const SignupDocument = gql`
     mutation signup($username: String!, $password: String!) {
   signup(signupInput: {username: $username, password: $password}) {
     id
+    accessToken
   }
 }
     `;
