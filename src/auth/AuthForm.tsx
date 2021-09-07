@@ -70,8 +70,14 @@ export const AuthForm: React.FC<Props> = ({type}) => {
 
     const [cookies, setCookies] = useCookies(["accessToken"]);
 
-    const [login, { error: loginError, data: loginData }] = useLoginMutation({ refetchQueries: [{ query: ME_QUERY }] });
-    const [signup, { error: signupError, data: signupData }] = useSignupMutation({ refetchQueries: [{ query: ME_QUERY }] });
+    const [login, { error: loginError, data: loginData }] = useLoginMutation({ 
+        refetchQueries: [{ query: ME_QUERY }],
+        awaitRefetchQueries: true
+    });
+    const [signup, { error: signupError, data: signupData }] = useSignupMutation({ 
+        refetchQueries: [{ query: ME_QUERY }] ,
+        awaitRefetchQueries: true
+    });
 
     useEffect(() => {
         if (loginData?.login || signupData?.signup) {
